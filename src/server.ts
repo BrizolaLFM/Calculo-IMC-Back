@@ -1,6 +1,6 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, response, Response } from 'express';
 import dotenv from 'dotenv';
-import _ from 'lodash';
+import _, { isEmpty, isNumber, result } from 'lodash';
 
 
 dotenv.config({ path: process.env.NODE_ENV === "test" ? "./test/.env-test" : ".env" });
@@ -12,22 +12,31 @@ server.use(cors({
     origin: '*'
 }));
 
-
-const port: number = _.toNumber(3000);
+const port: number = _.toNumber(8080);
 server.use(express.json())
 
 server.post('/imc', (req: Request, res: Response) => {
-    console.log(req.body) 
-    if (req.body == ''){
-        return res.json("message: favor preencher todos os campos!")
+    (req.body)
+    if (req.body.nome === "") {
+        return res.json("Favor preencher todos os campos!");
     }
-    
-    const peso = req.body.peso
-    const nome = req.body.nome
-    const xAltura = Number(req.body.altura)
-    const valorIMC = peso / (xAltura * xAltura)
+if (req.body.peso === '') {
+    return res.json("Favor preencher todos os campos!");
+}
+if (req.body.altura === "") {
+    return res.json("Favor preencher todos os campos!");
+}
 
-    let situacao = ""
+    const {nome, peso, altura} = req.body 
+    let xAltura = altura;
+
+    if(Number.isInteger(Number.parseFloat(altura))){
+        xAltura = altura.toString().replace(/\D/g, "")/100;
+    }
+
+    const valorIMC = (peso / (xAltura * xAltura))
+
+    let situacao = "";
 
     if (valorIMC < 18.5) {
         situacao = 'abaixo do peso.';
@@ -44,11 +53,9 @@ server.post('/imc', (req: Request, res: Response) => {
     }
     const result = `${nome} seu IMC é ${valorIMC} e você está ${situacao}`;
     console.log(result)
-    res.send({ "message": result })
+    res.send({ "message":result })
 });
 
 export default server.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
 });
-
-console.log('hello world!');
