@@ -17,14 +17,14 @@ server.use(express.json())
 
 server.post('/imc', (req: Request, res: Response) => {
     (req.body)
-    if (req.body.nome === "") {
-        return res.json("Favor preencher todos os campos!");
+    if (req.body.nome == "") {
+        return res.json({"message":"Favor preencher todos os campos!"});
     }
-if (req.body.peso === '') {
-    return res.json("Favor preencher todos os campos!");
+if (req.body.peso == '') {
+    return res.json({"message":"Favor preencher todos os campos!"});
 }
-if (req.body.altura === "") {
-    return res.json("Favor preencher todos os campos!");
+if (req.body.altura == "") {
+    return res.json({"message":"Favor preencher todos os campos!"});
 }
 
     const {nome, peso, altura} = req.body 
@@ -34,8 +34,8 @@ if (req.body.altura === "") {
         xAltura = altura.toString().replace(/\D/g, "")/100;
     }
 
-    const valorIMC = (peso / (xAltura * xAltura))
-
+    const valorIMC = parseFloat((peso / (xAltura * xAltura)).toFixed(2));
+    
     let situacao = "";
 
     if (valorIMC < 18.5) {
