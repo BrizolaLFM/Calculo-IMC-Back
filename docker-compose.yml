@@ -1,11 +1,12 @@
-version: '3'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+version: '3'
+
 services:
   postgres:
-    image: postgres
-    restart: always
+    image: postgres:latest
+    container_name: meu-IMC
     ports:
-      - 5432:5432
+      - "5433:5432"
     environment:
-      POSTGRES_USER: luizfmbrizola
-      POSTGRES_PASSWORD: brizola2031
-      POSTGRES_DB: IMC-banco
+     POSTGRES_USER: luizIMC
+     POSTGRES_PASSWORD: brizola
+     POSTGRES_DB: IMCdb
